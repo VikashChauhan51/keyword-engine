@@ -6,9 +6,11 @@ namespace KeywordEngine.Test.Tests;
 
 public class Tests
 {
+    private TestCaseRunner testRunner;
     [SetUp]
     public void Setup()
     {
+        testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly));
     }
 
     [Test]
@@ -16,7 +18,6 @@ public class Tests
     {
         var test = TestDataHelper.GetTest("test_with_valid_keyword_and_parameters.json");
 
-        var testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly));
         var response = await testRunner.Execute(test);
         Assert.IsNotNull(response);
         var json = JsonConvert.SerializeObject(response);
@@ -28,11 +29,19 @@ public class Tests
     public async Task Test_With_Valid_Keyword_And_Invalid_Parameters(string fileName)
     {
         var test = TestDataHelper.GetTest(fileName);
-
-        var testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly));
         var response = await testRunner.Execute(test);
         Assert.IsNotNull(response);
         var json = JsonConvert.SerializeObject(response, new StringEnumConverter());
         System.Console.WriteLine(json);
+    }
+
+    [Test]
+    public async Task Test_Without_Parameters_Keyword()
+    {
+        var test = TestDataHelper.GetTest("test_without_parameters_keyword.json");
+
+        var response = await testRunner.Execute(test);
+        Assert.IsNotNull(response);
+        var json = JsonConvert.SerializeObject(response);
     }
 }

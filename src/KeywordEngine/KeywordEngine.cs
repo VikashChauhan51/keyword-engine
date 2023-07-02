@@ -7,17 +7,19 @@ namespace KeywordEngine;
 public class KeywordEngine
 {
     private readonly IDictionary<string, Type> _keywordMap;
-    public KeywordEngine(IDictionary<string, Type> keywordMap)
+    private readonly IDependencyResolver? dependencyResolver;
+    public KeywordEngine(IDictionary<string, Type> keywordMap, IDependencyResolver? dependencyResolver = null)
     {
-        _keywordMap = keywordMap;
+        _keywordMap = keywordMap ?? throw new ArgumentNullException(nameof(keywordMap));
+        this.dependencyResolver = dependencyResolver;
     }
 
-    public Task<KeywordResponse> Invoke(string keywordName, IEnumerable<Parameter> parameters)
+    public Task<KeywordResponse> Invoke(string keywordName, IEnumerable<Parameter> parameters, ITestContext testContext)
     {
 
         if (_keywordMap.TryGetValue(keywordName, out var keywordType))
         {
-            var arguments = ParameterMapper.Map(keywordType, parameters);
+            var arguments = ParameterMapper.Map(keywordType, parameters, testContext, dependencyResolver);
             var keyword = (IKeyword)Activator.CreateInstance(keywordType, arguments)!;
             return keyword.Execute();
         }

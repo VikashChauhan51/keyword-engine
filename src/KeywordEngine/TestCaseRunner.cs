@@ -1,4 +1,6 @@
-﻿using KeywordEngine.Models;
+﻿using KeywordEngine.Abstraction;
+using KeywordEngine.Core;
+using KeywordEngine.Models;
 
 namespace KeywordEngine
 {
@@ -6,19 +8,24 @@ namespace KeywordEngine
     {
 
         private readonly KeywordEngine _keywordEngine;
-        public TestCaseRunner(IDictionary<string, Type> keywordMap)
+
+        public TestCaseRunner(IDictionary<string, Type> keywordMap, IDependencyResolver? dependencyResolver = null)
         {
-            _keywordEngine = new KeywordEngine(keywordMap);
+            _keywordEngine = new KeywordEngine(keywordMap, dependencyResolver);
         }
 
-        public async Task<TestResult> Execute(TestCase test)
+        public async Task<TestResult> Execute(TestCase test, ITestContext? testContext = null)
         {
             var result = new List<TestStepResult>();
             if (test?.Steps?.Any() ?? false)
             {
                 foreach (var step in test.Steps)
                 {
-                    var response = await _keywordEngine.Invoke(step.Keyword, step.Parameters ?? new List<Parameter>());
+                    var response = await _keywordEngine.Invoke(
+                        step.Keyword,
+                        step.Parameters ?? new List<Parameter>(),
+                        testContext ?? new TestContext(new Dictionary<string, object>()));
+
                     if (response != null)
                     {
                         result.Add(new TestStepResult

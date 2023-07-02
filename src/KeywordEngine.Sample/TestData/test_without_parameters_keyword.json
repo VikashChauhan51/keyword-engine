@@ -1,0 +1,12 @@
+{
+  "Id": 4,
+  "Title": "test with empty parameters keyword",
+  "Steps": [
+    {
+      "Title": "first step",
+      "Keyword": "DefaultConstructorKeyword",
+      "Index": 0,
+      "Parameters": []
+    }
+  ]
+}
