@@ -1,7 +1,9 @@
 ﻿
+using KeywordEngine.Models;
+
 namespace KeywordEngine.Abstraction;
 
 public interface IKeyword
 {
-    void Execute();
+    Task<KeywordResponse> Execute();
 }

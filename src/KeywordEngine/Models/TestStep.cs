@@ -2,7 +2,7 @@
 
 namespace KeywordEngine.Models;
 
-public class TestStep
+public sealed class TestStep
 {
     public string Title { get; init; } = string.Empty;
     public string Keyword { get; init; } = string.Empty;

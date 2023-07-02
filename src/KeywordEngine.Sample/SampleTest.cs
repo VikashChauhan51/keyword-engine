@@ -1,8 +1,9 @@
-using KeywordEngine.Models;
+﻿using KeywordEngine.Models;
 using KeywordEngine.Sample.Keywords;
 using NUnit.Framework;
 using System.Collections.Generic;
 using KeywordEngine.Core;
+using System.Threading.Tasks;
 
 namespace KeywordEngine.Sample
 {
@@ -14,7 +15,7 @@ namespace KeywordEngine.Sample
         }
 
         [Test]
-        public void First_Test()
+        public async Task First_Test()
         {
             var test = new TestCase
             {
@@ -49,7 +50,8 @@ namespace KeywordEngine.Sample
             };
 
             var testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly));
-            testRunner.Execute(test);
+            var response = await testRunner.Execute(test);
+            Assert.IsNotNull(response);
         }
     }
 }
