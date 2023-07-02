@@ -1,0 +1,23 @@
+{
+  "Id": 1,
+  "Title": "Demo test",
+  "Steps": [
+    {
+      "Title": "first step",
+      "Keyword": "MyFirstActionKeyword",
+      "Index": 0,
+      "Parameters": [
+        {
+          "Name": "message",
+          "Value": "Hello"
+        }
+      ]
+    },
+    {
+      "Title": "second step",
+      "Keyword": "MyFirstVerifyKeyword",
+      "Index": 1,
+      "Parameters": []
+    }
+  ]
+}

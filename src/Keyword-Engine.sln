@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeywordEngine", "KeywordEngine\KeywordEngine.csproj", "{A54A303E-5C89-42DF-8D2D-651C9943B05F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeywordEngine.Sample", "KeywordEngine.Sample\KeywordEngine.Sample.csproj", "{0480D6B9-412E-4E5E-8F5C-9C3D691CD1F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeywordEngine.Test", "KeywordEngine.Sample\KeywordEngine.Test.csproj", "{0480D6B9-412E-4E5E-8F5C-9C3D691CD1F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

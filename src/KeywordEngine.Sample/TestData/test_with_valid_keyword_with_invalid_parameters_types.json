@@ -1,0 +1,28 @@
+{
+  "Id": 1,
+  "Title": "Invalid parameters types test",
+  "Steps": [
+    {
+      "Title": "first step",
+      "Keyword": "MyFirstActionKeyword",
+      "Index": 0,
+      "Parameters": [
+        {
+          "Name": "message",
+          "Value": 100
+        }
+      ]
+    },
+    {
+      "Title": "second step",
+      "Keyword": "MyFirstVerifyKeyword",
+      "Index": 1,
+      "Parameters": [
+        {
+          "Name": "message",
+          "Value": 100
+        }
+      ]
+    }
+  ]
+}
