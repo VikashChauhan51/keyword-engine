@@ -1,5 +1,4 @@
-﻿global using KeywordEngine.Models;
-global using NUnit.Framework;
+﻿global using NUnit.Framework;
 global using KeywordEngine.Core;
 global using KeywordEngine.Test.Keywords;
 global using KeywordEngine.Abstraction;
