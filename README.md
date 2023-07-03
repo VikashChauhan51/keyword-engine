@@ -94,3 +94,6 @@ var testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).A
 var response = await testRunner.Execute(test);
 
 ```
+
+## Other examples:
+For more examples and use cases please check [test](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/KeywordEngine.Sample/Tests).
