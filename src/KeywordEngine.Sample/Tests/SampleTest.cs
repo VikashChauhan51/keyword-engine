@@ -1,4 +1,5 @@
 ﻿
+using System;
 using KeywordEngine.Test.Helpers;
 using Newtonsoft.Json.Converters;
 
@@ -7,6 +8,7 @@ namespace KeywordEngine.Test.Tests;
 public class Tests
 {
     private TestCaseRunner testRunner;
+
     [SetUp]
     public void Setup()
     {
@@ -21,6 +23,7 @@ public class Tests
         var response = await testRunner.Execute(test);
         Assert.IsNotNull(response);
         var json = JsonConvert.SerializeObject(response);
+        Console.WriteLine(json);
     }
 
     [Test]
@@ -43,5 +46,28 @@ public class Tests
         var response = await testRunner.Execute(test);
         Assert.IsNotNull(response);
         var json = JsonConvert.SerializeObject(response);
+        Console.WriteLine(json);
+    }
+
+    [Test]
+    public async Task Test_Pimitive_Parameters_Keyword()
+    {
+        var test = TestDataHelper.GetTest("test_primitive_data_keyword.json");
+
+        var response = await testRunner.Execute(test);
+        Assert.IsNotNull(response);
+        var json = JsonConvert.SerializeObject(response);
+        Console.WriteLine(json);
+    }
+
+    [Test]
+    public async Task Test_TestContext_Parameters_Keyword()
+    {
+        var test = TestDataHelper.GetTest("test_testcontext_keyword.json");
+
+        var response = await testRunner.Execute(test);
+        Assert.IsNotNull(response);
+        var json = JsonConvert.SerializeObject(response);
+        Console.WriteLine(json);
     }
 }

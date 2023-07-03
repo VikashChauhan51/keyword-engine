@@ -1,0 +1,12 @@
+{
+  "Id": 7,
+  "Title": "test with dependency injection keyword",
+  "Steps": [
+    {
+      "Title": "first step",
+      "Keyword": "DependencyInjectionActionKeyword",
+      "Index": 0,
+      "Parameters": []
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "Id": 6,
+  "Title": "test with primitive data types and testcontext keyword",
+  "Steps": [
+    {
+      "Title": "first step",
+      "Keyword": "TestContextKeyword",
+      "Index": 0,
+      "Parameters": [
+        {
+          "Name": "message",
+          "Value": "test"
+        },
+        {
+          "Name": "amount",
+          "Value": "45.45"
+        },
+        {
+          "Name": "date",
+          "Value": "03-07-2023 03:54:42 AM +00:00"
+        }
+      ]
+    }
+  ]
+}
