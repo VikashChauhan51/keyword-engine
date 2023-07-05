@@ -19,7 +19,7 @@ namespace KeywordEngine
             var result = new List<TestStepResult>();
             if (test?.Steps?.Any() ?? false)
             {
-                foreach (var step in test.Steps)
+                foreach (var step in test.Steps.OrderBy(x => x.Index))
                 {
                     var response = await _keywordEngine.Invoke(
                         step.Keyword,
