@@ -108,4 +108,4 @@ var response = await testRunner.Execute(test);
 ```
 
 ## Other examples:
-For more examples and use cases please check [test](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/KeywordEngine.Sample/Tests).
+For more examples and use cases please check [test](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/KeywordEngine.Sample/Tests) and [Samples](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/samples/).
