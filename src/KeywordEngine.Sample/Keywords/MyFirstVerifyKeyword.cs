@@ -14,7 +14,6 @@ internal class MyFirstVerifyKeyword : IVerifyKeyword
     {
         Console.WriteLine($"{nameof(MyFirstVerifyKeyword)} keyword executed.");
 
-        Assert.Fail("failed result");
         return Task.FromResult(new KeywordResponse
         {
             Status = ResponseStatus.Executed,

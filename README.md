@@ -1,30 +1,33 @@
 # KeywordEngine
 
-The [KeywordEngine](https://www.nuget.org/packages/KeywordEngine) is a keyword driven framework execution engine for automation test cases.
-It can easily integrate with any C# unit testing frameworks like **Nunit**,**XUnit**, and **MSTest**.
+[![NuGet Version](https://img.shields.io/nuget/v/KeywordEngine.svg?style=flat-square)](https://www.nuget.org/packages/KeywordEngine/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/KeywordEngine.svg?style=flat-square)](https://www.nuget.org/packages/KeywordEngine/)
+[![Build Status](https://github.com/VikashChauhan51/keyword-engine/actions/workflows/build.yml/badge.svg)](https://github.com/VikashChauhan51/keyword-engine/actions)
+[![License](https://img.shields.io/github/license/VikashChauhan51/keyword-engine.svg?style=flat-square)](https://github.com/VikashChauhan51/keyword-engine/blob/main/LICENSE)
 
-## At a glance:
+The [KeywordEngine](https://www.nuget.org/packages/KeywordEngine) is a keyword-driven framework execution engine for automating test cases.
+It can easily integrate with any C# unit testing frameworks like **NUnit**, **XUnit**, and **MSTest**.
+
+## At a Glance:
 - Compatible with .NET **Core 6+**.
-- Support any C# unit testing frameworks like **Nunit**,**XUnit**, and **MSTest**.
-- Doesn't depend on other packages (No dependencies beyond standard base libraries).
-- Map parameters to scalar types, including `Enums`, `Guid`,`datetimeoffset` and **Nullable** scalar types, `Enums`,`datetimeoffset` and `Guid`.
-- Support addition keyword data/parameters with the help of `ITestContext` interface.
-- Automatically ignore unused and additional provided parameters.
-- Support custom **DependencyInjection** to resolve the keyword dependencies with the help of `IDependencyResolver` interface.
-- Default parameters parser has `InvariantCulture`.
+- Supports any C# unit testing frameworks like **NUnit**, **XUnit**, and **MSTest**.
+- No external dependencies beyond standard base libraries.
+- Maps parameters to scalar types, including `Enums`, `Guid`, `DateTimeOffset`, and nullable scalar types.
+- Supports additional keyword data/parameters using the `ITestContext` interface.
+- Automatically ignores unused and additional provided parameters.
+- Supports custom **DependencyInjection** to resolve keyword dependencies via the `IDependencyResolver` interface.
+- Uses `InvariantCulture` for default parameter parsing.
 
 ## Quick Start Example:
 
-```C#
-
+```csharp
 using System;
 using KeywordEngine.Core;
 using KeywordEngine.Test.Keywords;
 using KeywordEngine.Abstraction;
 using KeywordEngine.Models;
 
-// Create keywords
-
+// Define keywords
 internal class MyFirstActionKeyword : IActionKeyword
 {
     private readonly string _message;
@@ -48,12 +51,6 @@ internal class MyFirstActionKeyword : IActionKeyword
 
 internal class MyFirstVerifyKeyword : IVerifyKeyword
 {
-    public MyFirstVerifyKeyword()
-    {
-
-    }
-
-
     public Task<KeywordResponse> Execute()
     {
         Console.WriteLine($"{nameof(MyFirstVerifyKeyword)} keyword executed.");
@@ -66,46 +63,116 @@ internal class MyFirstVerifyKeyword : IVerifyKeyword
     }
 }
 
-// Create test steps data
-
+// Create test steps
 var test = new TestCase
+{
+    Id = 1,
+    Title = "Demo test",
+    Steps = new List<TestStep>
+    {
+        new TestStep
+        {
+            Title = "First Step",
+            Keyword = nameof(MyFirstActionKeyword),
+            Index = 0,
+            Parameters = new List<Parameter>
             {
-                Id = 1,
-                Title = "Demo test",
-                Steps = new List<TestStep>
+                new Parameter
                 {
-                    new TestStep
-                    {
-                        Title="first step",
-                        Keyword=nameof(MyFirstActionKeyword),
-                        Index=0,
-                        Parameters=new List<Parameter>
-                        {
-                            new Parameter
-                            {
-                                Name="message",
-                                Value="Hello"
-                            }
-                        }
-                    },
-                    new TestStep
-                    {
-                        Title="second step",
-                        Keyword=nameof(MyFirstVerifyKeyword),
-                        Index=1,
-                        Parameters=new List<Parameter>()
-                    }
-
+                    Name = "message",
+                    Value = "Hello"
                 }
+            }
+        },
+        new TestStep
+        {
+            Title = "Second Step",
+            Keyword = nameof(MyFirstVerifyKeyword),
+            Index = 1,
+            Parameters = new List<Parameter>()
+        }
+    }
+};
 
-            };
+// Initialize dependency injection and import keywords
+var testRunner = TestRunnerFactory.CreateTestRunner();
 
-// Import all keywords
-var testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly));
-// Eexecute test
-var response = await testRunner.Execute(test);
-
+// Execute test
+await testRunner.ExecuteAsync(test);
 ```
 
-## Other examples:
-For more examples and use cases please check [test](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/KeywordEngine.Sample/Tests) and [Samples](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/samples/).
+## Enhanced Keyword and Test Runner Workflow
+
+### Centralized Dependency Injection
+The framework now supports centralized dependency injection using `DependencyResolverFactory`. You don't need to create dependency injection manually for every test case. Keywords and dependencies are automatically resolved.
+
+### Simplified Test Runner Creation
+The `TestRunnerFactory` simplifies test runner creation. It handles:
+- **Keyword Importing**: Automatically imports keywords if not already done.
+- **Dependency Injection**: Uses a singleton `IDependencyResolver` instance.
+- **Result Publishing**: Provides a default `ConsoleResultPublisher` or allows custom publishers.
+
+#### Updated `TestRunnerFactory` Example
+```csharp
+public static class TestRunnerFactory
+{
+    private static TestCaseRunner? _testCaseRunner;
+
+    public static TestCaseRunner CreateTestRunner()
+    {
+        if (_testCaseRunner == null)
+        {
+            var dependencyResolver = DependencyResolverFactory.CreateResolver();
+
+            if (Module.NoKeywords)
+            {
+                Module.Import(typeof(MyFirstActionKeyword).Assembly);
+            }
+
+            _testCaseRunner = new TestCaseRunner(
+                dependencyResolver: dependencyResolver,
+                testResultPublisher: new ConsoleResultPublisher());
+        }
+
+        return _testCaseRunner;
+    }
+}
+```
+
+### Custom Result Publisher
+You can define a custom result publisher by implementing the `ITestResultPublisher` interface. For example:
+
+```csharp
+public class CustomResultPublisher : ITestResultPublisher
+{
+    public Task PublishTestResultAsync(TestResult testResult)
+    {
+        // Custom publishing logic, e.g., save to a database or log
+        Console.WriteLine($"Publishing test result: {testResult.TestTitle}");
+        return Task.CompletedTask;
+    }
+}
+```
+
+### Using a Custom Result Publisher
+
+```csharp
+var testRunner = new TestCaseRunner(
+    testResultPublisher: new CustomResultPublisher()
+);
+```
+
+### Benefits of the New Flow
+1. **Ease of Use**:
+   - No manual keyword imports or dependency injection setup.
+   - Centralized and reusable DI logic.
+
+2. **Modular and Extensible**:
+   - Easily extendable with custom publishers or additional keyword assemblies.
+
+3. **Robust Execution**:
+   - Centralized exception handling and result publishing ensure consistent test execution.
+
+## Other Examples:
+For more examples and use cases, please check [Tests](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/KeywordEngine.Sample/Tests) and [Samples](https://github.com/VikashChauhan51/keyword-engine/tree/master/src/samples/).
+
