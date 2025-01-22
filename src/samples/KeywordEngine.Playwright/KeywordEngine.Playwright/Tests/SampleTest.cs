@@ -1,28 +1,28 @@
-﻿
-using KeywordEngine.Core;
-using KeywordEngine.Models;
+﻿using KeywordEngine.Models;
 using KeywordEngine.Playwright.Keywords;
-using KeywordEngine.Playwright.Pages;
 using TestDatContext = KeywordEngine.Core.TestContext;
 
 namespace KeywordEngine.Playwright.Tests;
+
 [Parallelizable(ParallelScope.Self)]
+[TestFixture]
 public class SampleTest : TestBase
 {
     TestCaseRunner testRunner;
     public SampleTest()
     {
-        testRunner = new TestCaseRunner(Module.Export(typeof(SearchKeyword).Assembly));
+        testRunner = TestRunnerFactory.CreateTestRunner();
     }
 
 
     [Test]
+    [Category("UnitTest")]  
     public async Task SampleBingSearch()
     {
 
         var test = new TestCase
         {
-            Id = 1,
+            Id = "1",
             Title = "search on bing",
             Steps = new List<TestStep>
                 {
@@ -59,8 +59,7 @@ public class SampleTest : TestBase
         };
 
         var testContext = new TestDatContext(new Dictionary<string, object>() { { nameof(IPage), Page } });
-        var response = await testRunner.Execute(test, testContext);
-        response.Should().NotBeNull();
+        await testRunner.ExecuteAsync(test, testContext);
 
     }
 }

@@ -15,7 +15,7 @@ public class SearchKeyword : IActionKeyword
         this.text = text;
     }
 
-    public async Task<KeywordResponse> Execute()
+    public async Task<KeywordResponse> ExecuteAsync()
     {
         var searchPage = new SearchPage(page);
         await searchPage.Goto();
