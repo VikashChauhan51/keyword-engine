@@ -5,21 +5,12 @@ public class DependencyInjectionTest
 {
     private TestCaseRunner testRunner;
 
-    private readonly IDependencyResolver dependencyResolver;
     public DependencyInjectionTest()
     {
-        KeywordRegistry.KeywordMap () =>
-        {
-            return Module.Export(typeof(MyFirstActionKeyword).Assembly);
-        }
-        dependencyResolver = new DependencyResolver(DIModule.Startup());
+
+        testRunner = new TestCaseRunner(DIModule.Startup(), new ConsoleResultPublisher());
     }
 
-    [SetUp]
-    public void Setup()
-    {
-        testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly), dependencyResolver, new ConsoleResultPublisher());
-    }
 
 
     [Test]

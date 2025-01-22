@@ -3,13 +3,24 @@
 namespace KeywordEngine.Test.Helpers;
 public static class DIModule
 {
-
-    public static ServiceProvider Startup()
+    private static ServiceProvider? _serviceProvider;
+    public static IDependencyResolver Startup()
     {
-        var serviceProvider = new ServiceCollection()
-    .AddSingleton<IFooService, FooService>()
-    .BuildServiceProvider();
+        if (_serviceProvider == null)
+        {
+            _serviceProvider = new ServiceCollection()
+        .AddSingleton<IFooService, FooService>()
+        .BuildServiceProvider();
+            ImportKeywords();
+        }
+        return new DependencyResolver(_serviceProvider);
+    }
 
-        return serviceProvider;
+    private static void ImportKeywords()
+    {
+        if (Module.NoKeywords)
+        {
+            Module.Import(typeof(MyFirstActionKeyword).Assembly);
+        }
     }
 }

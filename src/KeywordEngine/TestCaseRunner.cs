@@ -9,9 +9,9 @@ public sealed class TestCaseRunner
     private readonly KeywordEngine _keywordEngine;
     private readonly ITestResultPublisher? testResultPublisher;
 
-    public TestCaseRunner(IDictionary<string, Type> keywordMap, IDependencyResolver? dependencyResolver = null, ITestResultPublisher? testResultPublisher = null)
+    public TestCaseRunner(IDependencyResolver? dependencyResolver = null, ITestResultPublisher? testResultPublisher = null)
     {
-        _keywordEngine = new KeywordEngine(keywordMap, dependencyResolver);
+        _keywordEngine = new KeywordEngine(dependencyResolver);
         this.testResultPublisher = testResultPublisher;
     }
 
@@ -26,7 +26,7 @@ public sealed class TestCaseRunner
                 try
                 {
 
-                    var response = await _keywordEngine.Invoke(
+                    var response = await _keywordEngine.ExecuteAsync(
                         step.Keyword,
                         step.Parameters ?? new List<Parameter>(),
                         testContext ?? new TestContext(new Dictionary<string, object>()));

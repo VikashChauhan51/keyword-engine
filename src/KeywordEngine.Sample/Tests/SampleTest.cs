@@ -6,12 +6,12 @@ namespace KeywordEngine.Test.Tests;
 [TestFixture]
 public class Tests
 {
-    private TestCaseRunner testRunner;
+    private TestCaseRunner testRunner; 
 
     [SetUp]
     public void Setup()
     {
-        testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly), testResultPublisher: new ConsoleResultPublisher());
+        testRunner = TestRunnerFactory.CreateTestRunner();
     }
 
     [Test]
