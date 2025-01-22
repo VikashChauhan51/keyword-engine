@@ -10,7 +10,7 @@ internal class MyFirstActionKeyword : IActionKeyword
         _message = message;
     }
 
-    public Task<KeywordResponse> Execute()
+    public Task<KeywordResponse> ExecuteAsync()
     {
         Console.WriteLine(_message);
         Console.WriteLine($"{nameof(MyFirstActionKeyword)} keyword executed.");

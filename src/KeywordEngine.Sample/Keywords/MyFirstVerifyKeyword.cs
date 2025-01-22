@@ -10,10 +10,11 @@ internal class MyFirstVerifyKeyword : IVerifyKeyword
     }
 
 
-    public Task<KeywordResponse> Execute()
+    public Task<KeywordResponse> ExecuteAsync()
     {
         Console.WriteLine($"{nameof(MyFirstVerifyKeyword)} keyword executed.");
 
+        Assert.Fail("failed result");
         return Task.FromResult(new KeywordResponse
         {
             Status = ResponseStatus.Executed,

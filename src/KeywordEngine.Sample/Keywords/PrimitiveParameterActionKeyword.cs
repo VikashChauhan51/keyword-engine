@@ -12,7 +12,7 @@ public class PrimitiveParameterActionKeyword : IActionKeyword
         this.amount = amount;
         this.date = date;
     }
-    public Task<KeywordResponse> Execute()
+    public Task<KeywordResponse> ExecuteAsync()
     {
         Console.WriteLine($"age: {age} ammount: {amount} on date: {date}");
         Console.WriteLine($"{nameof(PrimitiveParameterActionKeyword)} keyword executed.");

@@ -2,25 +2,30 @@
 using KeywordEngine.Core;
 using KeywordEngine.Models;
 
-namespace KeywordEngine
+namespace KeywordEngine;
+public sealed class TestCaseRunner
 {
-    public class TestCaseRunner
+
+    private readonly KeywordEngine _keywordEngine;
+    private readonly ITestResultPublisher? testResultPublisher;
+
+    public TestCaseRunner(IDictionary<string, Type> keywordMap, IDependencyResolver? dependencyResolver = null, ITestResultPublisher? testResultPublisher = null)
     {
+        _keywordEngine = new KeywordEngine(keywordMap, dependencyResolver);
+        this.testResultPublisher = testResultPublisher;
+    }
 
-        private readonly KeywordEngine _keywordEngine;
+    public async Task ExecuteAsync(TestCase test, ITestContext? testContext = null)
+    {
+        var result = new List<TestStepResult>();
 
-        public TestCaseRunner(IDictionary<string, Type> keywordMap, IDependencyResolver? dependencyResolver = null)
+        if (test?.Steps?.Any() ?? false)
         {
-            _keywordEngine = new KeywordEngine(keywordMap, dependencyResolver);
-        }
-
-        public async Task<TestResult> Execute(TestCase test, ITestContext? testContext = null)
-        {
-            var result = new List<TestStepResult>();
-            if (test?.Steps?.Any() ?? false)
+            foreach (var step in test.Steps.OrderBy(x => x.Index))
             {
-                foreach (var step in test.Steps.OrderBy(x => x.Index))
+                try
                 {
+
                     var response = await _keywordEngine.Invoke(
                         step.Keyword,
                         step.Parameters ?? new List<Parameter>(),
@@ -36,15 +41,42 @@ namespace KeywordEngine
                             Result = response
                         });
                     }
-
                 }
+                catch (Exception ex)
+                {
+                    result.Add(new TestStepResult
+                    {
+                        Title = step.Title,
+                        Keyword = step.Keyword,
+                        Parameters = step.Parameters,
+                        Result = new KeywordResponse
+                        {
+                            Message = ex.Message,
+                            Status = ResponseStatus.Failed
+                        }
+                    });
+
+                    await PublishResult(test, result);
+                    throw;
+                }
+
             }
-            return test is not null ? new TestResult
+            await PublishResult(test, result);
+        }
+    }
+
+    private async Task PublishResult(TestCase test, IEnumerable<TestStepResult> stepsData)
+    {
+        if (testResultPublisher != null)
+        {
+            await testResultPublisher!.PublishTestResultAsync(test is not null ? new TestResult
             {
                 TestId = test.Id,
                 TestTitle = test.Title,
-                Steps = result
-            } : new TestResult();
+                Steps = stepsData
+            } : new TestResult());
+
         }
     }
+
 }

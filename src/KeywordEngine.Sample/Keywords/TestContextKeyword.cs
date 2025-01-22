@@ -14,7 +14,7 @@ public class TestContextKeyword : IActionKeyword
         this.testContext = testContext;
 
     }
-    public Task<KeywordResponse> Execute()
+    public Task<KeywordResponse> ExecuteAsync()
     {
         Console.WriteLine(message);
         Console.WriteLine($"{nameof(TestContextKeyword)} keyword executed.");

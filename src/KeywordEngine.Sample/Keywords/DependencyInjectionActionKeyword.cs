@@ -10,7 +10,7 @@ public class DependencyInjectionActionKeyword: IActionKeyword
         this.fooService = fooService;
     }
 
-    public Task<KeywordResponse> Execute()
+    public Task<KeywordResponse> ExecuteAsync()
     {
         fooService.DoThing(nameof(DependencyInjectionActionKeyword));
 

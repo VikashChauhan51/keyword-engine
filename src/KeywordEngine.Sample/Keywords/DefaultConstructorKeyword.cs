@@ -3,7 +3,7 @@
 namespace KeywordEngine.Test.Keywords;
 public class DefaultConstructorKeyword : IActionKeyword
 {
-    public Task<KeywordResponse> Execute()
+    public Task<KeywordResponse> ExecuteAsync()
     {
         Console.WriteLine($"{nameof(MyFirstActionKeyword)} keyword executed.");
 

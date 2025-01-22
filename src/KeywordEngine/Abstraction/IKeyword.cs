@@ -5,5 +5,5 @@ namespace KeywordEngine.Abstraction;
 
 public interface IKeyword
 {
-    Task<KeywordResponse> Execute();
+    Task<KeywordResponse> ExecuteAsync();
 }

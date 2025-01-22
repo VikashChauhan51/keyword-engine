@@ -4,7 +4,7 @@ using KeywordEngine.Models;
 
 namespace KeywordEngine;
 
-public class KeywordEngine
+public sealed class KeywordEngine
 {
     private readonly IDictionary<string, Type> _keywordMap;
     private readonly IDependencyResolver? dependencyResolver;
@@ -14,15 +14,15 @@ public class KeywordEngine
         this.dependencyResolver = dependencyResolver;
     }
 
-    public Task<KeywordResponse> Invoke(string keywordName, IEnumerable<Parameter> parameters, ITestContext testContext)
+    public async Task<KeywordResponse> Invoke(string keywordName, IEnumerable<Parameter> parameters, ITestContext testContext)
     {
-
-        if (_keywordMap.TryGetValue(keywordName, out var keywordType))
+        if (!_keywordMap.TryGetValue(keywordName, out var keywordType))
         {
-            var arguments = ParameterMapper.Map(keywordType, parameters, testContext, dependencyResolver);
-            var keyword = (IKeyword)Activator.CreateInstance(keywordType, arguments)!;
-            return keyword.Execute();
+            return new KeywordResponse { Status = ResponseStatus.None, Message = $"Keyword '{keywordName}' not found." };
         }
-        return Task.FromResult(new KeywordResponse { Status = ResponseStatus.None, Message = string.Empty });
+
+        var arguments = ParameterMapper.Map(keywordType, parameters, testContext, dependencyResolver);
+        var keyword = (IKeyword)Activator.CreateInstance(keywordType, arguments)!;
+        return await keyword.ExecuteAsync();
     }
 }

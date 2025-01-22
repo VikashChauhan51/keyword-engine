@@ -1,10 +1,9 @@
 ﻿
-using System;
 using KeywordEngine.Test.Helpers;
-using Newtonsoft.Json.Converters;
 
 namespace KeywordEngine.Test.Tests;
 
+[TestFixture]
 public class Tests
 {
     private TestCaseRunner testRunner;
@@ -12,18 +11,16 @@ public class Tests
     [SetUp]
     public void Setup()
     {
-        testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly));
+        testRunner = new TestCaseRunner(Module.Export(typeof(MyFirstActionKeyword).Assembly), testResultPublisher: new ConsoleResultPublisher());
     }
 
     [Test]
+    [Category("UnitTest")]
     public async Task Test_With_Valid_Keyword_And_Parameters()
     {
         var test = TestDataHelper.GetTest("test_with_valid_keyword_and_parameters.json");
 
-        var response = await testRunner.Execute(test);
-        Assert.IsNotNull(response);
-        var json = JsonConvert.SerializeObject(response);
-        Console.WriteLine(json);
+        await testRunner.ExecuteAsync(test);
     }
 
     [Test]
@@ -32,21 +29,14 @@ public class Tests
     public async Task Test_With_Valid_Keyword_And_Invalid_Parameters(string fileName)
     {
         var test = TestDataHelper.GetTest(fileName);
-        var response = await testRunner.Execute(test);
-        Assert.IsNotNull(response);
-        var json = JsonConvert.SerializeObject(response, new StringEnumConverter());
-        System.Console.WriteLine(json);
+        await testRunner.ExecuteAsync(test);
     }
 
     [Test]
     public async Task Test_Without_Parameters_Keyword()
     {
         var test = TestDataHelper.GetTest("test_without_parameters_keyword.json");
-
-        var response = await testRunner.Execute(test);
-        Assert.IsNotNull(response);
-        var json = JsonConvert.SerializeObject(response);
-        Console.WriteLine(json);
+        await testRunner.ExecuteAsync(test);
     }
 
     [Test]
@@ -54,10 +44,7 @@ public class Tests
     {
         var test = TestDataHelper.GetTest("test_primitive_data_keyword.json");
 
-        var response = await testRunner.Execute(test);
-        Assert.IsNotNull(response);
-        var json = JsonConvert.SerializeObject(response);
-        Console.WriteLine(json);
+        await testRunner.ExecuteAsync(test);
     }
 
     [Test]
@@ -65,9 +52,6 @@ public class Tests
     {
         var test = TestDataHelper.GetTest("test_testcontext_keyword.json");
 
-        var response = await testRunner.Execute(test);
-        Assert.IsNotNull(response);
-        var json = JsonConvert.SerializeObject(response);
-        Console.WriteLine(json);
+        await testRunner.ExecuteAsync(test);
     }
 }
