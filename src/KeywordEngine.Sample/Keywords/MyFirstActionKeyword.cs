@@ -2,6 +2,7 @@
 
 namespace KeywordEngine.Test.Keywords;
 
+[KeywordName("MyFirstActionKeyword")]
 internal class MyFirstActionKeyword : IActionKeyword
 {
     private readonly string _message;
