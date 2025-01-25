@@ -8,6 +8,20 @@
 The [KeywordEngine](https://www.nuget.org/packages/KeywordEngine) is a keyword-driven framework execution engine for automating test cases.
 It can easily integrate with any C# unit testing frameworks like **NUnit**, **XUnit**, and **MSTest**.
 
+  ## Installation
+
+You can install the KeywordEngine package via NuGet:
+
+```shell
+dotnet add package KeywordEngine
+```
+
+Or you can use the NuGet Package Manager:
+
+```shell
+Install-Package KeywordEngine
+```
+
 ## At a Glance:
 - Compatible with .NET **Core 6+**.
 - Supports any C# unit testing frameworks like **NUnit**, **XUnit**, and **MSTest**.
